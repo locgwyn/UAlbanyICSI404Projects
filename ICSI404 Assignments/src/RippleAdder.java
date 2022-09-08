@@ -1,5 +1,8 @@
 public class RippleAdder {
 
+	/*
+	 * USE XOR FOR THE RIPPLE ADDER (tt = f, ff = f, tf = t, ft = t)
+	 */
 	public static Longword add(Longword a, Longword b) {
 		Longword result = new Longword();
 		boolean carry = false;
