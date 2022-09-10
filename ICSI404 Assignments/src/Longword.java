@@ -91,7 +91,8 @@ public class Longword {
 			throw new IndexOutOfBoundsException("Amount is not valid!");
 		}
 		Longword newLWord = new Longword();
-		// Copy bit from this lword at index x - amount to newLWord at index x, simulates a "rightshift"
+		// Copy bit from this lword at index x - amount to newLWord at index x,
+		// simulates a "rightshift"
 		for (int x = 31; x >= amount; x--) {
 			newLWord.setBit(x, lword[x - amount]);
 		}
@@ -108,11 +109,13 @@ public class Longword {
 			throw new IndexOutOfBoundsException("Amount is not valid!");
 		}
 		Longword newLWord = new Longword();
-		// Copy bit from this lword at index x + amount to newLWord at index x, simulates a "leftshift" 
+		// Copy bit from this lword at index x + amount to newLWord at index x,
+		// simulates a "leftshift"
 		for (int x = 0; x < lword.length - amount; x++) {
 			newLWord.setBit(x, lword[x + amount]);
 		}
-		// Clear the bits from index y to the length of lword - amount, represents "empty" bits after shifting
+		// Clear the bits from index y to the length of lword - amount, represents
+		// "empty" bits after shifting
 		for (int y = 31; y >= lword.length - amount; y--) {
 			Bit tempBit = new Bit(false);
 			newLWord.setBit(y, tempBit);
@@ -267,6 +270,33 @@ public class Longword {
 				}
 			}
 		}
+	}
+
+	public Longword getTwosComplement() {
+		Longword complement = new Longword();
+		// Copy this lword to complement using new bits, not reusing original references
+		for (int x = 31; x >= 0; x--) {
+			Bit newBit = new Bit(false);
+			newBit.setBit(lword[x].getValue());
+			complement.setBit(x, newBit);
+		}
+		// Negate complement
+		for (int y = 31; y >= 0; y--) {
+			complement.setBit(y, complement.getBit(y).not());
+		}
+		// Add 1 to complement
+		for (int z = 31; z >= -1; z--) {
+			if (z == -1) { // Case where longword is all 1's/t's, add extra 1/t to beginning
+				complement.setBit(31, new Bit(true));
+				break;
+			} else if (complement.getBit(z).getValue() == false) { // No carry over, break from loop
+				complement.setBit(z, complement.getBit(z).not());
+				break;
+			} else { // Carry over
+				complement.setBit(z, complement.getBit(z).not());
+			}
+		}
+		return complement;
 	}
 
 	@Override
