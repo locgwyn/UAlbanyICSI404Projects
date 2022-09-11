@@ -63,6 +63,17 @@ public class RippleAdder_test {
 		} else {
 			System.out.println("Add binary -9 and -31 together, Expected -40 : FAIL");
 		}
+		
+		Longword test11 = new Longword();
+		Longword test12 = new Longword();
+		test11.set(-54321);
+		test12.set(-67890);
+		Longword result6 = RippleAdder.add(test11, test12); // -122211
+		if (result6.getSigned() == -122211) {
+			System.out.println("Add binary -54321 and -67890 together, Expected -122211 : PASS");
+		} else {
+			System.out.println("Add binary -54321 and -67890 together, Expected -122211 : FAIL");
+		}
 	}
 
 	public static void testSubtract() {
