@@ -1,6 +1,6 @@
 public class RippleAdder_test {
 	public static void main(String args[]) {
-
+		runTests();
 	}
 
 	public static void runTests() {
