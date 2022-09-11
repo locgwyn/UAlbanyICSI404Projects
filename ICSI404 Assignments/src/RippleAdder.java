@@ -18,7 +18,7 @@ public class RippleAdder {
 		// Get two's complement of b, since subtracting is just adding the negation of a
 		// number
 		Longword bComplement = b.getTwosComplement();
-		// Follows the same logic from add above
+		// Follows the same logic from above
 		for (int x = 31; x >= 0; x--) {
 			Bit sum = a.getBit(x).xor(bComplement.getBit(x)).xor(carry);
 			carry = a.getBit(x).and(bComplement.getBit(x)).or((a.getBit(x).xor(bComplement.getBit(x))).and(carry));
