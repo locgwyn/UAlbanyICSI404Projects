@@ -1,6 +1,11 @@
 public class RippleAdder_test {
 	public static void main(String args[]) {
+		Bit_test.runTests();
+		System.out.println();
+		Longword_test.runTests();
+		System.out.println();
 		runTests();
+
 	}
 
 	public static void runTests() {
@@ -98,7 +103,7 @@ public class RippleAdder_test {
 		} else {
 			System.out.println("Subtract binary 2345 from 12345, Expected 10000 : FAIL");
 		}
-		
+
 		Longword test5 = new Longword();
 		Longword test6 = new Longword();
 		test5.set(58);
@@ -108,6 +113,28 @@ public class RippleAdder_test {
 			System.out.println("Subtract binary -112 from 58, Expected 170 : PASS");
 		} else {
 			System.out.println("Subtract binary -112 from 58, Expected 170 : FAIL");
+		}
+
+		Longword test7 = new Longword();
+		Longword test8 = new Longword();
+		test7.set(-4321);
+		test8.set(7654);
+		Longword result4 = RippleAdder.subtract(test7, test8); // -11975
+		if (result4.getSigned() == -11975) {
+			System.out.println("Subtract binary 7654 from -4321, Expected -11975 : PASS");
+		} else {
+			System.out.println("Subtract binary 7654 from -4321, Expected -11975 : FAIL");
+		}
+
+		Longword test9 = new Longword();
+		Longword test10 = new Longword();
+		test9.set(-9876);
+		test10.set(-6543);
+		Longword result5 = RippleAdder.subtract(test9, test10); // -3333
+		if (result5.getSigned() == -3333) {
+			System.out.println("Subtract binary -6543 from -9876, Expected -3333 : PASS");
+		} else {
+			System.out.println("Subtract binary -6543 from -9876, Expected -3333 : FAIL");
 		}
 	}
 }
