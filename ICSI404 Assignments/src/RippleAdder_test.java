@@ -5,7 +5,6 @@ public class RippleAdder_test {
 		Longword_test.runTests();
 		System.out.println();
 		runTests();
-
 	}
 
 	public static void runTests() {
