@@ -47,4 +47,6 @@ public class Multiplier_test {
 			System.out.println("Multiply binary 54321 by 38789, Expected 477427269 : FAIL");
 		}
 	}
+	
+	// Next add a few negative numbers to test
 }
