@@ -3,31 +3,31 @@ public class ALU {
 	public static Longword doOp(Bit[] operation, Longword a, Longword b) {
 		Longword result = new Longword();
 
-		// AND
+		// AND (tfft)
 		if (operation[0].getValue() == true && operation[1].getValue() == false && operation[2].getValue() == false
 				&& operation[3].getValue() == false) {
 			result.copy(a.and(b));
 		}
 
-		// OR
+		// OR (tfft)
 		if (operation[0].getValue() == true && operation[1].getValue() == false && operation[2].getValue() == false
 				&& operation[3].getValue() == true) {
 			result.copy(a.or(b));
 		}
 
-		// XOR
+		// XOR (tftf)
 		if (operation[0].getValue() == true && operation[1].getValue() == false && operation[2].getValue() == true
 				&& operation[3].getValue() == false) {
 			result.copy(a.xor(b));
 		}
 
-		// NOT (a)
+		// NOT (a) (tftt)
 		if (operation[0].getValue() == true && operation[1].getValue() == false && operation[2].getValue() == true
 				&& operation[3].getValue() == true) {
 			result.copy(a.not());
 		}
 
-		// LEFT SHIFT
+		// LEFT SHIFT (ttff)
 		if (operation[0].getValue() == true && operation[1].getValue() == true && operation[2].getValue() == false
 				&& operation[3].getValue() == false) {
 			Longword temp = new Longword();
@@ -39,7 +39,7 @@ public class ALU {
 
 		}
 
-		// RIGHT SHIFT
+		// RIGHT SHIFT (ttft)
 		if (operation[0].getValue() == true && operation[1].getValue() == true && operation[2].getValue() == false
 				&& operation[3].getValue() == true) {
 			Longword temp = new Longword();
@@ -50,19 +50,19 @@ public class ALU {
 			result.copy(a.rightShift(temp.getSigned()));
 		}
 
-		// ADD
+		// ADD (tttf)
 		if (operation[0].getValue() == true && operation[1].getValue() == true && operation[2].getValue() == true
 				&& operation[3].getValue() == false) {
 			result.copy(RippleAdder.add(a, b));
 		}
 
-		// SUBTRACT
+		// SUBTRACT (tttt)
 		if (operation[0].getValue() == true && operation[1].getValue() == true && operation[2].getValue() == true
 				&& operation[3].getValue() == true) {
 			result.copy(RippleAdder.subtract(a, b));
 		}
 
-		// MULTIPLY
+		// MULTIPLY (fttt)
 		if (operation[0].getValue() == false && operation[1].getValue() == true && operation[2].getValue() == true
 				&& operation[3].getValue() == true) {
 			result.copy(Multiplier.multiply(a, b));
