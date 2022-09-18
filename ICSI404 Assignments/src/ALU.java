@@ -30,22 +30,24 @@ public class ALU {
 		// LEFT SHIFT
 		if (operation[0].getValue() == true && operation[1].getValue() == true && operation[2].getValue() == false
 				&& operation[3].getValue() == false) {
-			Longword temp = a.leftShift(b.getSigned());
-			// ignores all but the first 5 bits
+			Longword temp = new Longword();
+			// ignores all but the first 5 bits on longword b
 			for (int x = 31; x > 26; x--) {
-				result.setBit(x, temp.getBit(x));
+				temp.setBit(x, b.getBit(x));
 			}
+			result.copy(a.leftShift(temp.getSigned()));
 
 		}
 
 		// RIGHT SHIFT
 		if (operation[0].getValue() == true && operation[1].getValue() == true && operation[2].getValue() == false
 				&& operation[3].getValue() == true) {
-			Longword temp = a.rightShift(b.getSigned());
-			// ignores all but the first 5 bits
+			Longword temp = new Longword();
+			// ignores all but the first 5 bits on longword b
 			for (int x = 31; x > 26; x--) {
-				result.setBit(x, temp.getBit(x));
+				temp.setBit(x, b.getBit(x));
 			}
+			result.copy(a.rightShift(temp.getSigned()));
 		}
 
 		// ADD
