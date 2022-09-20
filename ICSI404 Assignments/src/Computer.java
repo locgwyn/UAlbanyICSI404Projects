@@ -1,4 +1,3 @@
-
 public class Computer {
 
 	private Bit running = new Bit(false);
