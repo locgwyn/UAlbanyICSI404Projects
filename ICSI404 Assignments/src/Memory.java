@@ -3,14 +3,19 @@ public class Memory {
 
 	private Bit[] memory = new Bit[8192];
 
+	public Memory() {
+		for (int x = 0; x < memory.length; x++) {
+			memory[x] = new Bit(false);
+		}
+	}
+
 	public Longword read(Longword address) {
 		Longword readResult = new Longword();
 		int memoryAddress = (address.getSigned() * 31) + address.getSigned();
-		for (int x = memoryAddress; x < x + 32; x++) {
+		for (int x = memoryAddress; x < x + 8; x++) {
 			Bit tempBit = new Bit(memory[x].getValue());
 			readResult.setBit(x, tempBit);
 		}
-
 		return readResult;
 	}
 
