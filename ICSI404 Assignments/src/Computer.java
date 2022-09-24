@@ -1,6 +1,7 @@
 public class Computer {
 
 	private Bit running = new Bit(false);
+	private Memory computerMemory = new Memory();
 	
 	public void run() {
 		while (running.getValue() == true) {
