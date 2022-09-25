@@ -11,7 +11,7 @@ public class Memory {
 	}
 
 	// address = 0, read/write from bit 0 to 7
-	// address = 1, read.write from bit 8 to 15
+	// address = 1, read/write from bit 8 to 15
 	// ... and so on
 
 	public Longword read(Longword address) {
