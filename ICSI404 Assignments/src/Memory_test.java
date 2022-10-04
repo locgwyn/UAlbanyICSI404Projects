@@ -21,7 +21,7 @@ public class Memory_test {
 	// NEEDS TO BE REWRITTEN TO REFLECT THE NEW LOGIC OF MEMORY USING LONGWORDS
 	// NEEDS TO BE REWRITTEN TO REFLECT THE NEW LOGIC OF MEMORY USING LONGWORDS
 	// NEEDS TO BE REWRITTEN TO REFLECT THE NEW LOGIC OF MEMORY USING LONGWORDS
-	
+
 	public static void testMemory() {
 		Memory test1 = new Memory();
 		Longword testData1 = new Longword();
@@ -46,9 +46,11 @@ public class Memory_test {
 
 		test2.write(testAddress2, testData2);
 		if (test2.read(testAddress2).toString().equals(data2)) {
-			System.out.println("Write binary 142 (tffftttf) to memory address 1023, Expected read " + data2 + " : PASS");
+			System.out
+					.println("Write binary 142 (tffftttf) to memory address 1023, Expected read " + data2 + " : PASS");
 		} else {
-			System.out.println("Write binary 142 (tffftttf) to memory address 1023, Expected read " + data2 + " : FAIL");
+			System.out
+					.println("Write binary 142 (tffftttf) to memory address 1023, Expected read " + data2 + " : FAIL");
 		}
 
 		Memory test3 = new Memory();
@@ -78,5 +80,27 @@ public class Memory_test {
 		} else {
 			System.out.println("Write binary 25 (fffttfft) to memory address 0, Expected read " + data4 + " : FAIL");
 		}
+
+		Memory test5 = new Memory();
+		Longword testData5 = new Longword();
+		Longword testData6 = new Longword();
+		Longword testAddress5 = new Longword();
+		Longword testAddress6 = new Longword();
+		String data5 = "tfftfttftfttftfffftttttttffffttt"; // Result after two writes
+		testData5.set(1234567); // 100101101011010000111 or ffffffffffftfftfttftfttftffffttt
+		testData6.set(9876543); // 100101101011010000111111 or fffffffftfftfttftfttftfffftttttt
+		testAddress5.set(6);
+		testAddress6.set(5);
+
+		test5.write(testAddress5, testData5);
+		test5.write(testAddress6, testData6);
+		if (test5.read(testAddress5).toString().equals(data5)) {
+			System.out.println("Write binary 1234567 into memory address 6 and also write binary 9876543 to"
+					+ " memory address 5, Expected read at address 6 " + data5 + " : PASS");
+		} else {
+			System.out.println("Write binary 1234567 into memory address 6 and also write binary 9876543 to"
+					+ " memory address 5, Expected read at address 6 " + data5 + " : FAIL");
+		}
+
 	}
 }
