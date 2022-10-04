@@ -20,7 +20,7 @@ public class Computer {
 	}
 
 	public void decode() {
-
+		// USE MASKING BY SHIFTING BITS
 	}
 
 	public void execute() {
