@@ -5,6 +5,10 @@ public class Computer {
 	private Longword PC = new Longword();
 	private Longword currentInstruction = new Longword();
 	private Longword[] registers = new Longword[16];
+	private Longword op1 = new Longword();
+	private Longword op2 = new Longword();
+	private Longword opCode = new Longword();
+	private Longword result = new Longword();
 
 	public void run() {
 		PC.set(0);
@@ -24,8 +28,10 @@ public class Computer {
 	}
 
 	public void decode() {
-		Longword op1 = new Longword();
-		Longword op2 = new Longword();
+		
+		// Determine op1, shift and then AND
+		
+		// Determine op2, shift and then AND
 		
 	}
 
