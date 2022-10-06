@@ -4,6 +4,7 @@ public class Computer {
 	private Memory computerMemory = new Memory();
 	private Longword PC = new Longword();
 	private Longword currentInstruction = new Longword();
+	private Longword[] registers = new Longword[16];
 
 	public void run() {
 		PC.set(0);
@@ -16,11 +17,16 @@ public class Computer {
 	}
 
 	public void fetch() {
-		int currentInstructionIndex = 31;
+		currentInstruction = computerMemory.read(PC);
+		Longword increment = new Longword();
+		increment.set(2);
+		RippleAdder.add(PC, increment);
 	}
 
 	public void decode() {
-		// USE MASKING BY SHIFTING BITS
+		Longword op1 = new Longword();
+		Longword op2 = new Longword();
+		
 	}
 
 	public void execute() {
