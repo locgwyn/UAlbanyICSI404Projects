@@ -4,6 +4,7 @@ public class Computer {
 	private Memory computerMemory = new Memory();
 	private Longword PC = new Longword();
 	private Longword currentInstruction = new Longword();
+	
 	private Longword[] registers = new Longword[16];
 	private Longword op1 = new Longword();
 	private Longword op2 = new Longword();
