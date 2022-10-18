@@ -3,7 +3,7 @@ public class ALU {
 	public static Longword doOp(Bit[] operation, Longword a, Longword b) {
 		Longword result = new Longword();
 
-		// AND (tfft)
+		// AND (tfff)
 		if (operation[0].getValue() == true && operation[1].getValue() == false && operation[2].getValue() == false
 				&& operation[3].getValue() == false) {
 			result.copy(a.and(b));
