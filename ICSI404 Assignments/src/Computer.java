@@ -1,5 +1,6 @@
 public class Computer {
 
+	// TEST
 	private Bit running = new Bit(true);
 	private Memory computerMemory = new Memory();
 	private Longword PC = new Longword();
