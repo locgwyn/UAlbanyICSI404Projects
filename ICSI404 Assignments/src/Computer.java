@@ -66,7 +66,9 @@ public class Computer {
 					moveVal.setBit(x, new Bit(true));
 				}
 			}
-
+			
+			// INTERRUPT IMPLEMENTATION HERE
+			
 		} else { // Otherwise regular decode
 
 			// Determine op1 register, shift to get nibble 2 and then AND with mask of tttt
