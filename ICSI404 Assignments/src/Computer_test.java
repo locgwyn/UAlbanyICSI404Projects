@@ -1,6 +1,6 @@
 
 public class Computer_test {
-	public static void main (String args[]) {
+	public static void main(String args[]) {
 		Bit_test.runTests();
 		System.out.println();
 		Longword_test.runTests();
@@ -14,11 +14,13 @@ public class Computer_test {
 		Memory_test.runTests();
 		runTests();
 	}
+
 	public static void runTests() {
 		testComputer();
 	}
-	
+
 	public static void testComputer() {
-		
+		Computer test1 = new Computer();
+		String[] testInstructions1 = new String[] {};
 	}
 }
