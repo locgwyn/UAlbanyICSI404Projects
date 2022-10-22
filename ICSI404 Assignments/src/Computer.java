@@ -132,34 +132,55 @@ public class Computer {
 		registers[resultRegister].copy(result);
 	}
 
-	// IDEA: Create a temporary longword to store the 1st set of instructions and then check if there are more,
-	// if yes then get the next instruction and append it to the temporary instruction to make the full longword
+	// IDEA: Create a temporary longword to store the 1st set of instructions and
+	// then check if there are more,
+	// if yes then get the next instruction and append it to the temporary
+	// instruction to make the full longword
 	// otherwise, pad the temporary instruction with 0's/f's
+
 	public void preload(String[] preloadBits) {
+		Longword currentAddress = new Longword();
+		int add = 0; // Address to store the current instruction in
+		currentAddress.set(add); // address as a longword
+
 		// Iterate through array of strings
-		for (int x = 0; x < preloadBits.length; x += 2) {
-			Longword bitGroup1 = new Longword(); // holds the string that is converted to bits
-			Longword bitGroup2 = new Longword();
+		for (int x = 0; x < preloadBits.length; x++) {
+			Longword completeInstructions = new Longword(); // holds the final set of bits to be stored into memory
 			int currentStringIndex = 16; // Keeps track of the current index of the string
 
-			// Writes from the string to the current byte from right to left
-			for (int currentBitIndex = 31; currentBitIndex > 15; currentBitIndex--) {
-				
-				// For bitGroup1
-				if (preloadBits[x].charAt(currentStringIndex) == 'f') { // if char is f, create a new false bit
-					bitGroup1.setBit(currentBitIndex, new Bit(false));
-				} else { // otherwise, create a new true bit
-					bitGroup1.setBit(currentBitIndex, new Bit(true));
+			if (x % 2 == 0) { // Retrieve 1st instruction
+				// Writes from the string to the current byte from right to left
+				for (int currentBitIndex = 31; currentBitIndex > 15; currentBitIndex--) {
+					// For bitGroup1
+					if (preloadBits[x].charAt(currentStringIndex) == 'f') { // if char is f, create a new false bit
+						completeInstructions.setBit(currentBitIndex, new Bit(false));
+					} else { // otherwise, create a new true bit
+						completeInstructions.setBit(currentBitIndex, new Bit(true));
+					}
+					currentStringIndex--;
 				}
-
-				// For bitGroup2
-				if (preloadBits[x + 1].charAt(currentStringIndex) == 'f') {
-					bitGroup2.setBit(currentBitIndex, new Bit(false));
-				} else {
-					bitGroup2.setBit(currentBitIndex, new Bit(true));
+			} else { // Retrieve 2nd instruction and then store to memory
+				for (int currentBitIndex = 15; currentBitIndex > 0; currentBitIndex--) {
+					// For bitGroup1
+					if (preloadBits[x].charAt(currentStringIndex) == 'f') { // if char is f, create a new false bit
+						completeInstructions.setBit(currentBitIndex, new Bit(false));
+					} else { // otherwise, create a new true bit
+						completeInstructions.setBit(currentBitIndex, new Bit(true));
+					}
+					currentStringIndex--;
 				}
+				computerMemory.write(currentAddress, completeInstructions);
 
-				currentStringIndex--;
+				// Sets a new address to store the next set of instructions
+				add += 4;
+				currentAddress.set(add);
+			}
+			// Case where we have an odd amount of instructions, pad with 0's/f's and store
+			if (preloadBits.length % 2 == 1) { 
+				for (int currentBitIndex = 15; currentBitIndex > 0; currentBitIndex--) {
+					completeInstructions.setBit(currentBitIndex, new Bit(false));
+				}
+				computerMemory.write(currentAddress, completeInstructions);
 			}
 		}
 	}
