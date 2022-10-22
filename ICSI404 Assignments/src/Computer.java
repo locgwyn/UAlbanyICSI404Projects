@@ -7,7 +7,7 @@ public class Computer {
 
 	private Longword[] registers = new Longword[16];
 
-	private Bit[] opCode = new Bit[4]; // Holds the opCode from the instruction
+	private Bit[] opCode = new Bit[] {new Bit(false), new Bit(false), new Bit(false), new Bit(false)};
 
 	// Regular Instructions
 	private Longword op1 = new Longword(); // operand 1
@@ -24,6 +24,9 @@ public class Computer {
 	private Longword result = new Longword(); // result of operation
 
 	public void run() {
+		for(int x = 0; x < 16; x++) { // Initializes the registers
+			registers[x] = new Longword();
+		}
 		PC.set(0);
 		while (running.getValue() == true) {
 			fetch();
@@ -38,7 +41,7 @@ public class Computer {
 		// Increment PC by 2
 		Longword increment = new Longword();
 		increment.set(2);
-		RippleAdder.add(PC, increment);
+		PC.copy(RippleAdder.add(PC, increment));
 	}
 
 	public void decode() {
@@ -140,13 +143,13 @@ public class Computer {
 
 	public void preload(String[] preloadBits) {
 		Longword currentAddress = new Longword();
+		Longword completeInstructions = new Longword(); // holds the final set of bits to be stored into memory
 		int add = 0; // Address to store the current instruction in
 		currentAddress.set(add); // address as a longword
 
 		// Iterate through array of strings
 		for (int x = 0; x < preloadBits.length; x++) {
-			Longword completeInstructions = new Longword(); // holds the final set of bits to be stored into memory
-			int currentStringIndex = 16; // Keeps track of the current index of the string
+			int currentStringIndex = 15; // Keeps track of the current index of the string
 
 			if (x % 2 == 0) { // Retrieve 1st instruction
 				// Writes from the string to the current byte from right to left
@@ -160,7 +163,7 @@ public class Computer {
 					currentStringIndex--;
 				}
 			} else { // Retrieve 2nd instruction and then store to memory
-				for (int currentBitIndex = 15; currentBitIndex > 0; currentBitIndex--) {
+				for (int currentBitIndex = 15; currentBitIndex >= 0; currentBitIndex--) {
 					// For bitGroup1
 					if (preloadBits[x].charAt(currentStringIndex) == 'f') { // if char is f, create a new false bit
 						completeInstructions.setBit(currentBitIndex, new Bit(false));
@@ -175,13 +178,13 @@ public class Computer {
 				add += 4;
 				currentAddress.set(add);
 			}
-			// Case where we have an odd amount of instructions, pad with 0's/f's and store
-			if (preloadBits.length % 2 == 1) { 
-				for (int currentBitIndex = 15; currentBitIndex > 0; currentBitIndex--) {
-					completeInstructions.setBit(currentBitIndex, new Bit(false));
-				}
-				computerMemory.write(currentAddress, completeInstructions);
+		}
+		// Case where we have an odd amount of instructions, pad with 0's/f's and store
+		if (preloadBits.length % 2 == 1) { 
+			for (int currentBitIndex = 15; currentBitIndex >= 0; currentBitIndex--) {
+				completeInstructions.setBit(currentBitIndex, new Bit(false));
 			}
+			computerMemory.write(currentAddress, completeInstructions);
 		}
 	}
 }
