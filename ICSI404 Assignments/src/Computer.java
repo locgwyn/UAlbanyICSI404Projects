@@ -94,25 +94,25 @@ public class Computer {
 	}
 
 	public void execute() {
-			// HALT instruction
+		// HALT instruction
 		if (opCode[0].getValue() == false && opCode[1].getValue() == false && opCode[2].getValue() == false
 				&& opCode[3].getValue() == false) { // HALT instruction
 			running.setBit(false);
 		}
-			// MOVE instruction
+		// MOVE instruction
 		else if (opCode[0].getValue() == false && opCode[1].getValue() == false && opCode[2].getValue() == false
 				&& opCode[3].getValue() == true) { // MOVE instruction
 			result.copy(moveVal);
 
-			// INTERRUPT instruction	
+			// INTERRUPT instruction
 		} else if (opCode[0].getValue() == false && opCode[1].getValue() == false && opCode[2].getValue() == true
-				&& opCode[3].getValue() == false) { 
+				&& opCode[3].getValue() == false) {
 			if (interruptParam.getBit(31).getValue() == false) { // Print all of the registers
 				for (int x = 0; x < 16; x++) {
 					System.out.println(registers[x].toString());
 				}
 			} else { // Print all 1024 bytes of memory
-				for (int x = 0; x < 1024 ; x++) {
+				for (int x = 0; x < 1024; x++) {
 					Longword address = new Longword();
 					address.set(x);
 					System.out.println(computerMemory.read(address).toString());
@@ -131,8 +131,36 @@ public class Computer {
 		}
 		registers[resultRegister].copy(result);
 	}
-	
-	public void preload(String[] preBits) {
-		
+
+	// IDEA: Create a temporary longword to store the 1st set of instructions and then check if there are more,
+	// if yes then get the next instruction and append it to the temporary instruction to make the full longword
+	// otherwise, pad the temporary instruction with 0's/f's
+	public void preload(String[] preloadBits) {
+		// Iterate through array of strings
+		for (int x = 0; x < preloadBits.length; x += 2) {
+			Longword bitGroup1 = new Longword(); // holds the string that is converted to bits
+			Longword bitGroup2 = new Longword();
+			int currentStringIndex = 16; // Keeps track of the current index of the string
+
+			// Writes from the string to the current byte from right to left
+			for (int currentBitIndex = 31; currentBitIndex > 15; currentBitIndex--) {
+				
+				// For bitGroup1
+				if (preloadBits[x].charAt(currentStringIndex) == 'f') { // if char is f, create a new false bit
+					bitGroup1.setBit(currentBitIndex, new Bit(false));
+				} else { // otherwise, create a new true bit
+					bitGroup1.setBit(currentBitIndex, new Bit(true));
+				}
+
+				// For bitGroup2
+				if (preloadBits[x + 1].charAt(currentStringIndex) == 'f') {
+					bitGroup2.setBit(currentBitIndex, new Bit(false));
+				} else {
+					bitGroup2.setBit(currentBitIndex, new Bit(true));
+				}
+
+				currentStringIndex--;
+			}
+		}
 	}
 }
