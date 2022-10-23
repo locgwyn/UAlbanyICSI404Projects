@@ -7,7 +7,7 @@ public class Computer {
 
 	private Longword[] registers = new Longword[16];
 
-	private Bit[] opCode = new Bit[] {new Bit(false), new Bit(false), new Bit(false), new Bit(false)};
+	private Bit[] opCode = new Bit[] { new Bit(false), new Bit(false), new Bit(false), new Bit(false) };
 
 	// Regular Instructions
 	private Longword op1 = new Longword(); // operand 1
@@ -24,7 +24,7 @@ public class Computer {
 	private Longword result = new Longword(); // result of operation
 
 	public void run() {
-		for(int x = 0; x < 16; x++) { // Initializes the registers
+		for (int x = 0; x < 16; x++) { // Initializes the registers
 			registers[x] = new Longword();
 		}
 		PC.set(0);
@@ -71,12 +71,12 @@ public class Computer {
 				for (int x = 0; x < 24; x++) {
 					moveVal.setBit(x, new Bit(true));
 				}
-
-				// INTERRUPT instruction
-			} else if (opCode[0].getValue() == false && opCode[1].getValue() == false && opCode[2].getValue() == true
-					&& opCode[3].getValue() == false) {
-				interruptParam.copy(currentInstruction.rightShift(16).leftShift(28).rightShift(28).and(fourBitMask));
 			}
+			// INTERRUPT instruction
+		} else if (opCode[0].getValue() == false && opCode[1].getValue() == false && opCode[2].getValue() == true
+				&& opCode[3].getValue() == false) {
+			interruptParam.copy(currentInstruction.rightShift(16).leftShift(28).rightShift(28).and(fourBitMask));
+			
 		} else { // Otherwise regular decode
 
 			// Determine op1 register, shift to get nibble 2 and then AND with mask of tttt
@@ -114,12 +114,14 @@ public class Computer {
 				for (int x = 0; x < 16; x++) {
 					System.out.println(registers[x].toString());
 				}
+				System.out.println();
 			} else { // Print all 1024 bytes of memory
 				for (int x = 0; x < 1024; x++) {
 					Longword address = new Longword();
 					address.set(x);
 					System.out.println(computerMemory.read(address).toString());
 				}
+				System.out.println();
 			}
 			// Otherwise do regular op instruction
 		} else {
@@ -180,7 +182,7 @@ public class Computer {
 			}
 		}
 		// Case where we have an odd amount of instructions, pad with 0's/f's and store
-		if (preloadBits.length % 2 == 1) { 
+		if (preloadBits.length % 2 == 1) {
 			for (int currentBitIndex = 31; currentBitIndex > 15; currentBitIndex--) {
 				completeInstructions.setBit(currentBitIndex, new Bit(false));
 			}
