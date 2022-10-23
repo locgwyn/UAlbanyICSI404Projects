@@ -27,7 +27,7 @@ public class Computer_test {
 		String[] testInstructions1 = new String[] { "ffftfftffffftftf", "ffftffftfffffttt", "tttfffftfftffftt",
 				"fftfffffffffffff", "fftfffffffffffft", "ffffffffffffffff" };
 		test1.preload(testInstructions1);
-		System.out.println("----TEST 1----"); // TO FIND TESTS USE CTRL-F
+		System.out.println("----COMPUTER TEST 1----"); // TO FIND TESTS USE CTRL-F
 		test1.run();
 		System.out.println();
 
@@ -37,7 +37,7 @@ public class Computer_test {
 		String[] testInstructions2 = new String[] { "ffftffttfffftftf", "ffftftftfffffttf", "ttttffttftftftff",
 				"fftfffffffffffff", "fftfffffffffffft", "ffffffffffffffff" };
 		test2.preload(testInstructions2);
-		System.out.println("----TEST 2----");
+		System.out.println("----COMPUTER TEST 2----");
 		test2.run();
 		System.out.println();
 
@@ -47,7 +47,7 @@ public class Computer_test {
 		String[] testInstructions3 = new String[] { "fffttfftftfffftt", "ffftfffffffffftt", "fttttfftfffffttf",
 				"fftfffffffffffff", "ffffffffffffffff" };
 		test3.preload(testInstructions3);
-		System.out.println("----TEST 3----");
+		System.out.println("----COMPUTER TEST 3----");
 		test3.run();
 		System.out.println();
 
@@ -58,7 +58,7 @@ public class Computer_test {
 		String[] testInstructions4 = new String[] { "ffftftfffffftttt", "fffttffffffftfff", "tttfftfftffffftf",
 				"tttfftfffftfttff", "ttttttffftfftttt", "fftfffffffffffff", "ffffffffffffffff" };
 		test4.preload(testInstructions4);
-		System.out.println("----TEST 4----");
+		System.out.println("----COMPUTER TEST 4----");
 		test4.run();
 		System.out.println();
 
@@ -68,7 +68,7 @@ public class Computer_test {
 		String[] testInstructions5 = new String[] { "ffftfffffftttfft", "ffftffftfftffftf", "tfffffffffftfftf",
 				"fftfffffffffffff", "ffffffffffffffff" };
 		test5.preload(testInstructions5);
-		System.out.println("----TEST 5----");
+		System.out.println("----COMPUTER TEST 5----");
 		test5.run();
 		System.out.println();
 
@@ -78,7 +78,7 @@ public class Computer_test {
 		String[] testInstructions6 = new String[] { "ffftfftfftftfftt", "ffftftfffttttftf", "tfftfftfftfffttf",
 				"fftfffffffffffff", "ffffffffffffffff" };
 		test6.preload(testInstructions6);
-		System.out.println("----TEST 6----");
+		System.out.println("----COMPUTER TEST 6----");
 		test6.run();
 		System.out.println();
 
@@ -88,7 +88,7 @@ public class Computer_test {
 		String[] testInstructions7 = new String[] { "fffttffttftttfft", "ffftftftfffttttf", "tftftfftftftfttt",
 				"fftfffffffffffff", "ffffffffffffffff" };
 		test7.preload(testInstructions7);
-		System.out.println("----TEST 7----");
+		System.out.println("----COMPUTER TEST 7----");
 		test7.run();
 		System.out.println();
 
@@ -98,7 +98,7 @@ public class Computer_test {
 		String[] testInstructions8 = new String[] { "fffttttffftftttt", "fffttfttfffffttf", "ttfftttftfttttft",
 				"fftfffffffffffff", "ffffffffffffffff" };
 		test8.preload(testInstructions8);
-		System.out.println("----TEST 8----");
+		System.out.println("----COMPUTER TEST 8----");
 		test8.run();
 		System.out.println();
 
@@ -108,7 +108,7 @@ public class Computer_test {
 		String[] testInstructions9 = new String[] { "ffftftftftttftft", "ffftftttffffftff", "ttftftftfttttftf",
 				"fftfffffffffffff", "ffffffffffffffff" };
 		test9.preload(testInstructions9);
-		System.out.println("----TEST 9----");
+		System.out.println("----COMPUTER TEST 9----");
 		test9.run();
 		System.out.println();
 
@@ -117,7 +117,7 @@ public class Computer_test {
 		String[] testInstructions10 = new String[] { "ffftffftftfftftt", "tfttffftfffffftf", "fftfffffffffffff",
 				"ffffffffffffffff" };
 		test10.preload(testInstructions10);
-		System.out.println("----TEST 10----");
+		System.out.println("----COMPUTER TEST 10----");
 		test10.run();
 		System.out.println();
 
