@@ -153,7 +153,7 @@ public class Computer {
 
 			if (x % 2 == 0) { // Retrieve 1st instruction
 				// Writes from the string to the current byte from right to left
-				for (int currentBitIndex = 31; currentBitIndex > 15; currentBitIndex--) {
+				for (int currentBitIndex = 15; currentBitIndex >= 0; currentBitIndex--) {
 					// For bitGroup1
 					if (preloadBits[x].charAt(currentStringIndex) == 'f') { // if char is f, create a new false bit
 						completeInstructions.setBit(currentBitIndex, new Bit(false));
@@ -163,7 +163,7 @@ public class Computer {
 					currentStringIndex--;
 				}
 			} else { // Retrieve 2nd instruction and then store to memory
-				for (int currentBitIndex = 15; currentBitIndex >= 0; currentBitIndex--) {
+				for (int currentBitIndex = 31; currentBitIndex > 15; currentBitIndex--) {
 					// For bitGroup1
 					if (preloadBits[x].charAt(currentStringIndex) == 'f') { // if char is f, create a new false bit
 						completeInstructions.setBit(currentBitIndex, new Bit(false));
@@ -181,7 +181,7 @@ public class Computer {
 		}
 		// Case where we have an odd amount of instructions, pad with 0's/f's and store
 		if (preloadBits.length % 2 == 1) { 
-			for (int currentBitIndex = 15; currentBitIndex >= 0; currentBitIndex--) {
+			for (int currentBitIndex = 31; currentBitIndex > 15; currentBitIndex--) {
 				completeInstructions.setBit(currentBitIndex, new Bit(false));
 			}
 			computerMemory.write(currentAddress, completeInstructions);
