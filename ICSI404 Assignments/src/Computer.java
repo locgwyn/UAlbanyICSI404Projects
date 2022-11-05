@@ -137,12 +137,6 @@ public class Computer {
 		registers[resultRegister].copy(result);
 	}
 
-	// IDEA: Create a temporary longword to store the 1st set of instructions and
-	// then check if there are more,
-	// if yes then get the next instruction and append it to the temporary
-	// instruction to make the full longword
-	// otherwise, pad the temporary instruction with 0's/f's
-
 	public void preload(String[] preloadBits) {
 		Longword currentAddress = new Longword();
 		Longword completeInstructions = new Longword(); // holds the final set of bits to be stored into memory
