@@ -183,4 +183,9 @@ public class Computer {
 			computerMemory.write(currentAddress, completeInstructions);
 		}
 	}
+	
+	// Access registers
+	public Longword[] getRegisters() {
+		return registers;
+	}
 }

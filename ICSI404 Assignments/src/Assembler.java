@@ -3,89 +3,102 @@ public class Assembler {
 	public static String[] assemble(String[] instructionList) {
 		String[] bitPatterns = new String[instructionList.length];
 		for (int x = 0; x < instructionList.length; x++) {
-			String convertedInstruction = "";
-			String[] tokens = instructionList[x].split("\\s+");
+			String convertedInstruction = ""; // Holds the current instruction represented in bits
+			String[] tokens = instructionList[x].split("\\s+"); // Splits the current instruction into tokens
 
 			// Switch statement for commands
 			switch (tokens[0]) {
 
+			// All basic operations take 4 tokens - keyword, register, register, register
 			case "and":
-				convertedInstruction.concat(convertKeyword(tokens[0]));
-				convertedInstruction.concat(convertRegister(tokens[1]));
-				convertedInstruction.concat(convertRegister(tokens[2]));
-				convertedInstruction.concat(convertRegister(tokens[3]));
+				convertedInstruction = convertedInstruction.concat(convertKeyword(tokens[0]));
+				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[1]));
+				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[2]));
+				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[3]));
 				break;
 
 			case "or":
-				convertedInstruction.concat(convertKeyword(tokens[0]));
-				convertedInstruction.concat(convertRegister(tokens[1]));
-				convertedInstruction.concat(convertRegister(tokens[2]));
-				convertedInstruction.concat(convertRegister(tokens[3]));
+				convertedInstruction = convertedInstruction.concat(convertKeyword(tokens[0]));
+				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[1]));
+				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[2]));
+				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[3]));
 				break;
 
 			case "xor":
-				convertedInstruction.concat(convertKeyword(tokens[0]));
-				convertedInstruction.concat(convertRegister(tokens[1]));
-				convertedInstruction.concat(convertRegister(tokens[2]));
-				convertedInstruction.concat(convertRegister(tokens[3]));
+				convertedInstruction = convertedInstruction.concat(convertKeyword(tokens[0]));
+				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[1]));
+				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[2]));
+				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[3]));
 				break;
 
 			case "not":
-				convertedInstruction.concat(convertKeyword(tokens[0]));
-				convertedInstruction.concat(convertRegister(tokens[1]));
-				convertedInstruction.concat(convertRegister(tokens[2]));
-				convertedInstruction.concat(convertRegister(tokens[3]));
+				convertedInstruction = convertedInstruction.concat(convertKeyword(tokens[0]));
+				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[1]));
+				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[2]));
+				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[3]));
 				break;
 
 			case "lshift":
-				convertedInstruction.concat(convertKeyword(tokens[0]));
-				convertedInstruction.concat(convertRegister(tokens[1]));
-				convertedInstruction.concat(convertRegister(tokens[2]));
-				convertedInstruction.concat(convertRegister(tokens[3]));
+				convertedInstruction = convertedInstruction.concat(convertKeyword(tokens[0]));
+				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[1]));
+				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[2]));
+				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[3]));
 				break;
-				
+
 			case "rshift":
-				convertedInstruction.concat(convertKeyword(tokens[0]));
-				convertedInstruction.concat(convertRegister(tokens[1]));
-				convertedInstruction.concat(convertRegister(tokens[2]));
-				convertedInstruction.concat(convertRegister(tokens[3]));
+				convertedInstruction = convertedInstruction.concat(convertKeyword(tokens[0]));
+				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[1]));
+				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[2]));
+				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[3]));
 				break;
-				
+
 			case "add":
-				convertedInstruction.concat(convertKeyword(tokens[0]));
-				convertedInstruction.concat(convertRegister(tokens[1]));
-				convertedInstruction.concat(convertRegister(tokens[2]));
-				convertedInstruction.concat(convertRegister(tokens[3]));
+				convertedInstruction = convertedInstruction.concat(convertKeyword(tokens[0]));
+				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[1]));
+				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[2]));
+				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[3]));
 				break;
-				
+
 			case "sub":
-				convertedInstruction.concat(convertKeyword(tokens[0]));
-				convertedInstruction.concat(convertRegister(tokens[1]));
-				convertedInstruction.concat(convertRegister(tokens[2]));
-				convertedInstruction.concat(convertRegister(tokens[3]));
+				convertedInstruction = convertedInstruction.concat(convertKeyword(tokens[0]));
+				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[1]));
+				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[2]));
+				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[3]));
 				break;
-				
+
 			case "mult":
-				convertedInstruction.concat(convertKeyword(tokens[0]));
-				convertedInstruction.concat(convertRegister(tokens[1]));
-				convertedInstruction.concat(convertRegister(tokens[2]));
-				convertedInstruction.concat(convertRegister(tokens[3]));
+				convertedInstruction = convertedInstruction.concat(convertKeyword(tokens[0]));
+				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[1]));
+				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[2]));
+				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[3]));
 				break;
-				
+
 			case "halt":
-				convertedInstruction.concat(convertKeyword(tokens[0]));
-				convertedInstruction.concat("ffffffffffff"); // any bit after halt command is ignored, so just set to false
+				convertedInstruction = convertedInstruction.concat(convertKeyword(tokens[0]));
+				convertedInstruction = convertedInstruction.concat("ffffffffffff"); // any bit after halt command is
+																					// ignored, so just set to false
 				break;
-				
+
+				// Only takes 3 tokens - keyword, register, number
 			case "move":
-				convertedInstruction.concat(convertKeyword(tokens[0]));
-				convertedInstruction.concat(convertRegister(tokens[1]));
-				convertedInstruction.concat(convertNumber(tokens[2]));
+				convertedInstruction = convertedInstruction.concat(convertKeyword(tokens[0]));
+				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[1]));
+				convertedInstruction = convertedInstruction.concat(convertNumber(tokens[2]));
 				break;
-				
+
+				// Only takes 2 tokens - keyword, number (either 0 or 1)
 			case "interr":
-				convertedInstruction.concat(convertKeyword(tokens[0]));
-				convertedInstruction.concat(convertNumber(tokens[1]));
+				convertedInstruction = convertedInstruction.concat(convertKeyword(tokens[0]));
+				// pad the instruction with false bits
+				convertedInstruction = convertedInstruction.concat("ffff");
+				// determines either interrupt 0 or 1
+				convertedInstruction = convertedInstruction.concat(convertNumber(tokens[1]));
+				break;
+			
+				// case where keyword is unrecognized, print an error and add a halt
+			default:
+				System.out.println("ERROR - UNKNOWN COMMAND ENCOUNTERED IN INSTRUCTION " + x + ", DEFAULT TO HALT");
+				convertedInstruction = "ffffffffffffffff";
 				break;
 			}
 
@@ -95,8 +108,12 @@ public class Assembler {
 		return bitPatterns;
 	}
 
+	// HELPER METHODS
+	
 	public static String convertRegister(String text) {
 		String register = new String();
+		
+		// Converts the given register into its appropriate bits
 		switch (text) {
 		case "R0":
 			register = "ffff";
@@ -152,32 +169,45 @@ public class Assembler {
 
 	public static String convertKeyword(String text) {
 		String keyword = new String();
-
-		switch(text) {
+		
+		// Converts the given keyword to the appropriate opcode
+		switch (text) {
 		case "and":
 			keyword = "tfff";
+			break;
 		case "or":
 			keyword = "tfft";
+			break;
 		case "xor":
 			keyword = "tftf";
+			break;
 		case "not":
 			keyword = "tftt";
+			break;
 		case "lshift":
 			keyword = "ttff";
+			break;
 		case "rshift":
 			keyword = "ttft";
+			break;
 		case "add":
 			keyword = "tttf";
+			break;
 		case "sub":
 			keyword = "tttt";
+			break;
 		case "mult":
 			keyword = "fttt";
+			break;
 		case "halt":
 			keyword = "ffff";
+			break;
 		case "move":
 			keyword = "ffft";
+			break;
 		case "interr":
 			keyword = "fftf";
+			break;
 		}
 		return keyword;
 	}
@@ -185,6 +215,8 @@ public class Assembler {
 	public static String convertNumber(String text) {
 		String number = new String();
 		Longword num = new Longword();
+		
+		// Converts given number as a string into bits
 		num.set(Integer.parseInt(text));
 		number = num.toString().substring(24); // Just gets the 8 bits needed for a number
 		return number;
