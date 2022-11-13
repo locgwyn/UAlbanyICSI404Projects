@@ -19,6 +19,19 @@ public class Computer {
 	// Interrupt Instruction
 	private Longword interruptParam = new Longword();
 
+	// Jump Instruction
+	private Longword jumpAddress = new Longword();
+
+	// Compare and Branch Instructions
+	private Bit comp0 = new Bit(false); // result from compare
+	private Bit comp1 = new Bit(false);
+	private Bit cond0 = new Bit(false); // condition code from instruction
+	private Bit cond1 = new Bit(false);
+	private Longword regA = new Longword(); // comparison operands
+	private Longword regB = new Longword();
+	private Longword jumpAmt = new Longword(); // amount to jump
+	private Bit willBranch = new Bit(false);
+
 	// Final result
 	private int resultRegister = 0;
 	private Longword result = new Longword(); // result of operation
@@ -49,6 +62,8 @@ public class Computer {
 		fourBitMask.set(15); // (tttt)/(1111)
 		Longword eightBitMask = new Longword();
 		eightBitMask.set(255); // (tttttttt)/(11111111)
+		Longword tenBitMask = new Longword();
+		tenBitMask.set(1023); // (tttttttttt)/(1111111111) - used for jump address
 
 		// Retrieve the opCode from the current instruction, get nibble 1
 		for (int x = 0; x < 4; x++) {
@@ -76,7 +91,41 @@ public class Computer {
 		} else if (opCode[0].getValue() == false && opCode[1].getValue() == false && opCode[2].getValue() == true
 				&& opCode[3].getValue() == false) {
 			interruptParam.copy(currentInstruction.rightShift(16).leftShift(28).rightShift(28).and(fourBitMask));
-			
+
+			// JUMP instruction
+		} else if (opCode[0].getValue() == false && opCode[1].getValue() == false && opCode[2].getValue() == true
+				&& opCode[3].getValue() == true) {
+			// shift to get last 10 bits
+			jumpAddress.copy(currentInstruction.rightShift(16).leftShift(22).rightShift(22).and(tenBitMask));
+
+			// COMPARE instruction
+		} else if (opCode[0].getValue() == false && opCode[1].getValue() == true && opCode[2].getValue() == false
+				&& opCode[3].getValue() == false) {
+
+			// Determine registers to be compared
+			regA.copy(registers[currentInstruction.rightShift(20).leftShift(28).rightShift(28).and(fourBitMask)
+					.getSigned()]);
+			regB.copy(registers[currentInstruction.rightShift(16).leftShift(28).rightShift(28).and(fourBitMask)
+					.getSigned()]);
+
+			// BRANCH instructions
+		} else if (opCode[0].getValue() == false && opCode[1].getValue() == true && opCode[2].getValue() == false
+				&& opCode[3].getValue() == true) {
+
+			// retrieve condition codes
+			cond0.setBit(currentInstruction.getBit(20).getValue());
+			cond1.setBit(currentInstruction.getBit(21).getValue());
+
+			// Determine amount to jump by
+			jumpAmt.copy(currentInstruction.rightShift(16).leftShift(22).rightShift(22).and(tenBitMask));
+
+			// If number is negative, sign extend
+			if (jumpAmt.getBit(22).getValue() == true) {
+				for (int x = 0; x < 22; x++) {
+					jumpAmt.setBit(x, new Bit(true));
+				}
+			}
+
 		} else { // Otherwise regular decode
 
 			// Determine op1 register, shift to get nibble 2 and then AND with mask of tttt
@@ -90,7 +139,7 @@ public class Computer {
 			op2.copy(registers[op2Index]);
 
 			// Determine result register, shift to get nibble 4 and then AND with mask of
-			// tttt
+			// tttt (1111)
 			resultRegister = currentInstruction.rightShift(16).leftShift(28).rightShift(28).and(fourBitMask)
 					.getSigned();
 		}
@@ -123,6 +172,66 @@ public class Computer {
 				}
 				System.out.println();
 			}
+
+			// JUMP instruction
+		} else if (opCode[0].getValue() == false && opCode[1].getValue() == false && opCode[2].getValue() == true
+				&& opCode[3].getValue() == true) { // Nothing done in execute
+			return;
+
+			// COMPARE instruction
+		} else if (opCode[0].getValue() == false && opCode[1].getValue() == true && opCode[2].getValue() == false
+				&& opCode[3].getValue() == false) {
+			int regAVal = regA.getSigned();
+			int regBVal = regB.getSigned();
+
+			if (regAVal > regBVal) {
+				comp0.setBit(true);
+				comp1.setBit(false);
+			} else if (regAVal >= regBVal) {
+				comp0.setBit(true);
+				comp1.setBit(true);
+			} else {
+				comp0.setBit(false);
+				comp1.setBit(false);
+			}
+			return;
+
+			// BRANCH instructions
+		} else if (opCode[0].getValue() == false && opCode[1].getValue() == true && opCode[2].getValue() == false
+				&& opCode[3].getValue() == true) {
+
+			// IfGreaterThanOrEqual (t,t)
+			if (cond0.getValue() == true && cond1.getValue() == true) {
+				if (comp0.getValue() == cond0.getValue() && comp1.getValue() == cond1.getValue()) {
+					willBranch.setBit(true);
+					return;
+				}
+			}
+
+			// IfGreaterThan (t,f)
+			else if (cond0.getValue() == true && cond1.getValue() == false) {
+				if (comp0.getValue() == cond0.getValue() && comp1.getValue() == cond1.getValue()) {
+					willBranch.setBit(true);
+					return;
+				}
+			}
+
+			// IfEqual (f/t,t)
+			else if ((cond0.getValue() == false || cond0.getValue() == true) && cond1.getValue() == true) {
+				if (comp1.getValue() == cond1.getValue()) {
+					willBranch.setBit(true);
+					return;
+				}
+			}
+			
+			// IfNotEqual (f/t,f)
+			else if ((cond0.getValue() == false || cond0.getValue() == true) && cond1.getValue() == false) {
+				if (comp1.getValue() == cond1.getValue()) {
+					willBranch.setBit(true);
+					return;
+				}
+			}
+
 			// Otherwise do regular op instruction
 		} else {
 			result.copy(ALU.doOp(opCode, op1, op2));
@@ -130,11 +239,36 @@ public class Computer {
 	}
 
 	public void store() {
+		// INTERRUPT, nothing happens in store
 		if (opCode[0].getValue() == false && opCode[1].getValue() == false && opCode[2].getValue() == true
-				&& opCode[3].getValue() == false) { // INTERRUPT, nothing happens in store
+				&& opCode[3].getValue() == false) {
 			return;
+
+			// JUMP, set PC to new value
+		} else if (opCode[0].getValue() == false && opCode[1].getValue() == false && opCode[2].getValue() == true
+				&& opCode[3].getValue() == true) {
+			PC.set(jumpAddress.getSigned());
+			return;
+
+			// COMPARE, nothing happens in store
+		} else if (opCode[0].getValue() == false && opCode[1].getValue() == true && opCode[2].getValue() == false
+				&& opCode[3].getValue() == false) {
+			return;
+
+			// BRANCH, if willBranch true then jump, otherwise no jump
+		} else if (opCode[0].getValue() == false && opCode[1].getValue() == true && opCode[2].getValue() == false
+				&& opCode[3].getValue() == true) {
+
+			if (willBranch.getValue() == true) {
+				PC.copy(RippleAdder.add(PC, jumpAmt));
+				willBranch.setBit(false);
+			} else {
+				return;
+			}
+
+		} else {
+			registers[resultRegister].copy(result);
 		}
-		registers[resultRegister].copy(result);
 	}
 
 	public void preload(String[] preloadBits) {
@@ -183,7 +317,7 @@ public class Computer {
 			computerMemory.write(currentAddress, completeInstructions);
 		}
 	}
-	
+
 	// Access registers
 	public Longword[] getRegisters() {
 		return registers;

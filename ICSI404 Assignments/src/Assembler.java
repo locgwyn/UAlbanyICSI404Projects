@@ -95,6 +95,56 @@ public class Assembler {
 				convertedInstruction = convertedInstruction.concat(convertNumber(tokens[1]));
 				break;
 			
+				// Only takes 2 tokens - keyword, number (0 - 1023)
+			case "jump":
+				convertedInstruction = convertedInstruction.concat(convertKeyword(tokens[0]));
+				// pad the number with false bits
+				convertedInstruction = convertedInstruction.concat("ff");
+				// converts the number into 10 bits
+				convertedInstruction = convertedInstruction.concat(convert10BitNum(tokens[1]));
+				break;
+				
+				// Only takes 3 tokens - keyword, register, register
+			case "compare":
+				convertedInstruction = convertedInstruction.concat(convertKeyword(tokens[0]));
+				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[1]));
+				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[2]));
+				break;
+				
+				// All branch conditions take 2 tokens and have two bit cond codes - keyword, number (0 - 511)
+				
+			case "branchifequal":
+				convertedInstruction = convertedInstruction.concat(convertKeyword(tokens[0]));
+				// equal cond code - ft
+				convertedInstruction = convertedInstruction.concat("ft");
+				// converts the number into 10 bits
+				convertedInstruction = convertedInstruction.concat(convert10BitNum(tokens[1]));
+				break;
+				
+			case "branchifnotequal":
+				convertedInstruction = convertedInstruction.concat(convertKeyword(tokens[0]));
+				// not equal cond code - ff
+				convertedInstruction = convertedInstruction.concat("ff");
+				// converts the number into 10 bits
+				convertedInstruction = convertedInstruction.concat(convert10BitNum(tokens[1]));
+				break;
+				
+			case "branchifgreater":
+				convertedInstruction = convertedInstruction.concat(convertKeyword(tokens[0]));
+				// greater cond code - tf
+				convertedInstruction = convertedInstruction.concat("tf");
+				// converts the number into 10 bits
+				convertedInstruction = convertedInstruction.concat(convert10BitNum(tokens[1]));
+				break;
+				
+			case "branchifgreaterorequal":
+				convertedInstruction = convertedInstruction.concat(convertKeyword(tokens[0]));
+				// greaterorequal cond code - tt
+				convertedInstruction = convertedInstruction.concat("tt");
+				// converts the number into 10 bits
+				convertedInstruction = convertedInstruction.concat(convert10BitNum(tokens[1]));
+				break;
+				
 				// case where keyword is unrecognized, print an error and add a halt
 			default:
 				System.out.println("ERROR - UNKNOWN COMMAND ENCOUNTERED IN INSTRUCTION " + x + ", DEFAULT TO HALT");
@@ -208,6 +258,24 @@ public class Assembler {
 		case "interr":
 			keyword = "fftf";
 			break;
+		case "jump":
+			keyword = "fftt";
+			break;
+		case "compare":
+			keyword = "ftff";
+			break;
+		case "branchifequal":
+			keyword = "ftft";
+			break;
+		case "branchifnotequal":
+			keyword = "ftft";
+			break;
+		case "branchifgreater":
+			keyword = "ftft";
+			break;
+		case "branchifgreaterorequal":
+			keyword = "ftft";
+			break;
 		}
 		return keyword;
 	}
@@ -221,4 +289,15 @@ public class Assembler {
 		number = num.toString().substring(24); // Just gets the 8 bits needed for a number
 		return number;
 	}
+	
+	public static String convert10BitNum(String text) {
+		String number = new String();
+		Longword num = new Longword();
+		
+		// Converts given number as a string into bits
+		num.set(Integer.parseInt(text));
+		number = num.toString().substring(22); //  gets the 10 bits needed for the number
+		return number;
+	}
+	
 }
