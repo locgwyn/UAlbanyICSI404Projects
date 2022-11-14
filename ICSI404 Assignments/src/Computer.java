@@ -113,8 +113,8 @@ public class Computer {
 				&& opCode[3].getValue() == true) {
 
 			// retrieve condition codes
-			cond0.setBit(currentInstruction.getBit(20).getValue());
-			cond1.setBit(currentInstruction.getBit(21).getValue());
+			cond0.setBit(currentInstruction.getBit(4).getValue());
+			cond1.setBit(currentInstruction.getBit(5).getValue());
 
 			// Determine amount to jump by
 			jumpAmt.copy(currentInstruction.rightShift(16).leftShift(22).rightShift(22).and(tenBitMask));
@@ -202,7 +202,7 @@ public class Computer {
 
 			// IfGreaterThanOrEqual (t,t)
 			if (cond0.getValue() == true && cond1.getValue() == true) {
-				if (comp0.getValue() == cond0.getValue() && comp1.getValue() == cond1.getValue()) {
+				if (comp0.getValue() == cond0.getValue() || comp1.getValue() == cond1.getValue()) {
 					willBranch.setBit(true);
 					return;
 				}

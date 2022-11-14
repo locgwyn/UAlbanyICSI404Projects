@@ -98,7 +98,7 @@ public class Assembler {
 				// Only takes 2 tokens - keyword, number (0 - 1023)
 			case "jump":
 				convertedInstruction = convertedInstruction.concat(convertKeyword(tokens[0]));
-				// pad the number with false bits
+				// pad the instruction with false bits
 				convertedInstruction = convertedInstruction.concat("ff");
 				// converts the number into 10 bits
 				convertedInstruction = convertedInstruction.concat(convert10BitNum(tokens[1]));
@@ -107,6 +107,8 @@ public class Assembler {
 				// Only takes 3 tokens - keyword, register, register
 			case "compare":
 				convertedInstruction = convertedInstruction.concat(convertKeyword(tokens[0]));
+				// pad the instruction with false bits
+				convertedInstruction = convertedInstruction.concat("ffff");
 				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[1]));
 				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[2]));
 				break;
