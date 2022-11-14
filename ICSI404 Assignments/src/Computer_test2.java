@@ -82,8 +82,7 @@ public class Computer_test2 {
 		System.out.println();
 
 		Computer test5 = new Computer();
-		// Create a simple loop that iterates by 3 until R0 is greater than or equal to
-		// R1
+		// Create a simple loop that iterates by 3 until R0 is greater than or equal to R1
 		String[] testInstructions5 = new String[] { "move R1 9", "move R2 3", "move R4 56", "move R5 75", "move R6 99",
 				"add R4 R5 R5", "add R2 R0 R0", "compare R1 R0", "branchifgreaterorequal -8", "sub R5 R6 R9",
 				"interr 0", "halt" };
