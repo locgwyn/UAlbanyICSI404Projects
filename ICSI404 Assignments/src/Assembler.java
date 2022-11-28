@@ -147,6 +147,34 @@ public class Assembler {
 				convertedInstruction = convertedInstruction.concat(convert10BitNum(tokens[1]));
 				break;
 				
+			case "push":
+				convertedInstruction = convertedInstruction.concat(convertKeyword(tokens[0]));
+				// pad instruction with false bits
+				convertedInstruction = convertedInstruction.concat("ffffffff");
+				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[1]));
+				break;
+				
+			case "pop":
+				convertedInstruction = convertedInstruction.concat(convertKeyword(tokens[0]));
+				// has additional "opcode", then pad with false bits
+				convertedInstruction = convertedInstruction.concat("ftffffff");
+				convertedInstruction = convertedInstruction.concat(convertRegister(tokens[1]));
+				break;
+				
+			case "call":
+				convertedInstruction = convertedInstruction.concat(convertKeyword(tokens[0]));
+				// has additional "opcode"
+				convertedInstruction = convertedInstruction.concat("tf");
+				// 10 Bit number representing an absolute address in memory
+				convertedInstruction = convertedInstruction.concat(convert10BitNum(tokens[1]));
+				break;
+				
+			case "return":
+				convertedInstruction = convertedInstruction.concat(convertKeyword(tokens[0]));
+				// has additional "opcode" with no variable bits, pad with false bits
+				convertedInstruction = convertedInstruction.concat("ttffffffffff");
+				break;
+				
 				// case where keyword is unrecognized, print an error and add a halt
 			default:
 				System.out.println("ERROR - UNKNOWN COMMAND ENCOUNTERED IN INSTRUCTION " + x + ", DEFAULT TO HALT");
@@ -277,6 +305,18 @@ public class Assembler {
 			break;
 		case "branchifgreaterorequal":
 			keyword = "ftft";
+			break;
+		case "push":
+			keyword = "fttf";
+			break;
+		case "pop":
+			keyword = "fttf";
+			break;
+		case "call":
+			keyword = "fttf";
+			break;
+		case "return":
+			keyword = "fttf";
 			break;
 		}
 		return keyword;

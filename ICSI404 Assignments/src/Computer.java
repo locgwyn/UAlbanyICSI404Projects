@@ -32,6 +32,13 @@ public class Computer {
 	private Longword jumpAmt = new Longword(); // amount to jump
 	private Bit willBranch = new Bit(false);
 
+	// Stack Instructions
+	private Longword SP = new Longword(); // points to an address in memory indicating the next place to write the stack
+	private Bit stackCond0 = new Bit(false);
+	private Bit stackCond1 = new Bit(false);
+	private Longword stackReg = new Longword(); // holds the register to be pushed/pop
+	private Longword callAddress = new Longword(); // holds the address to jump to from call
+
 	// Final result
 	private int resultRegister = 0;
 	private Longword result = new Longword(); // result of operation
@@ -40,6 +47,7 @@ public class Computer {
 		for (int x = 0; x < 16; x++) { // Initializes the registers
 			registers[x] = new Longword();
 		}
+		SP.set(1020);
 		PC.set(0);
 		while (running.getValue() == true) {
 			fetch();
@@ -126,6 +134,31 @@ public class Computer {
 				}
 			}
 
+			// STACK instructions
+		} else if (opCode[0].getValue() == false && opCode[1].getValue() == true && opCode[2].getValue() == true
+				&& opCode[3].getValue() == false) {
+			
+			// Retrieve condition codes for stack
+			stackCond0.setBit(currentInstruction.getBit(4).getValue());
+			stackCond1.setBit(currentInstruction.getBit(5).getValue());
+			
+			// Push
+			if(stackCond0.getValue() == false && stackCond1.getValue() == false) {
+				stackReg.copy(currentInstruction.rightShift(16).leftShift(28).rightShift(28).and(fourBitMask));
+			}
+			// Pop
+			else if(stackCond0.getValue() == false && stackCond1.getValue() == true){
+				stackReg.copy(currentInstruction.rightShift(16).leftShift(28).rightShift(28).and(fourBitMask));
+			}
+			// Call
+			else if(stackCond0.getValue() == true && stackCond1.getValue() == false) {
+				callAddress.copy(currentInstruction.rightShift(16).leftShift(22).rightShift(22).and(tenBitMask));
+			}
+			// Return
+			else if(stackCond0.getValue() == true && stackCond1.getValue() == true) {
+				return;
+			}
+			
 		} else { // Otherwise regular decode
 
 			// Determine op1 register, shift to get nibble 2 and then AND with mask of tttt
@@ -223,7 +256,7 @@ public class Computer {
 					return;
 				}
 			}
-			
+
 			// IfNotEqual (f/t,f)
 			else if ((cond0.getValue() == false || cond0.getValue() == true) && cond1.getValue() == false) {
 				if (comp1.getValue() == cond1.getValue()) {
@@ -231,7 +264,49 @@ public class Computer {
 					return;
 				}
 			}
-
+			
+			// STACK instructions
+		} else if(opCode[0].getValue() == false && opCode[1].getValue() == true && opCode[2].getValue() == true
+				&& opCode[3].getValue() == false) {
+			
+			// Push
+			if(stackCond0.getValue() == false && stackCond1.getValue() == false) {
+				computerMemory.write(SP, registers[stackReg.getSigned()]);
+				Longword decrement = new Longword();
+				decrement.set(4);
+				SP.copy(RippleAdder.subtract(SP, decrement));
+				return;
+			}
+			
+			// Pop
+			else if(stackCond0.getValue() == false && stackCond1.getValue() == true) {
+				Longword increment = new Longword();
+				increment.set(4);
+				SP.copy(RippleAdder.add(SP, increment));
+				registers[stackReg.getSigned()].copy(computerMemory.read(SP));
+				return;
+			}
+			// Call
+			else if(stackCond0.getValue() == true && stackCond1.getValue() == false) {
+				Longword next = new Longword();
+				Longword decrement = new Longword();
+				next.set(2);
+				decrement.set(4);
+				computerMemory.write(SP, RippleAdder.add(PC, next));
+				SP.copy(RippleAdder.subtract(SP, decrement));
+				PC.set(callAddress.getSigned());
+				return;
+			}
+			
+			// Return
+			else if(stackCond0.getValue() == true && stackCond1.getValue() == true) {
+				Longword increment = new Longword();
+				increment.set(4);
+				SP.copy(RippleAdder.add(SP, increment));
+				PC.set(computerMemory.read(SP).getSigned()-2);
+				return;
+			}
+			
 			// Otherwise do regular op instruction
 		} else {
 			result.copy(ALU.doOp(opCode, op1, op2));
@@ -265,7 +340,12 @@ public class Computer {
 			} else {
 				return;
 			}
-
+			
+			// STACK, nothing happens in store
+		} else if(opCode[0].getValue() == false && opCode[1].getValue() == true && opCode[2].getValue() == true
+				&& opCode[3].getValue() == false) {
+			return;
+			
 		} else {
 			registers[resultRegister].copy(result);
 		}
